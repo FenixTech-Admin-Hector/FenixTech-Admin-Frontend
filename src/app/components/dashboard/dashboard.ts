@@ -21,6 +21,8 @@ export class Dashboard implements OnInit {
     ingresos: { totales: 20000, mes: 300, dia: 8 }
   };
 
+  fechaActual = new Date();
+
   constructor(
     private dashboardService: DashboardService,
     private cdr: ChangeDetectorRef // 2. Lo inyectamos en el constructor

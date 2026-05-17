@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  admin-frontend:
+    build: .
+    ports:
+      - "4200:80" # Tu PC (4200) apunta al Nginx de Docker (80)
+    networks:
+      - fenix_shared_network
+
+# Nos conectamos a la red que ya crea tu Backend
+networks:
+  fenix_shared_network:
+    external: true

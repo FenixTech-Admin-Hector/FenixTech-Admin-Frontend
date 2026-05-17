@@ -6,7 +6,20 @@ Este repositorio contiene el código fuente del Frontend para el Panel de Admini
 
 Sigue estos pasos estrictamente para configurar tu entorno de desarrollo local. Actualmente, la ejecución se realiza de forma nativa sin Docker.
 
-### **1. Prerrequisitos**
+### 🐳 **Opción A: Ejecución con Docker (Recomendado)**
+
+El proyecto está preparado para auto-compilarse y ejecutarse dentro de un servidor Nginx ultraligero.
+
+#### **1. Prerrequisitos:** Asegúrate de tener instalado Docker (y Docker Desktop encendido).
+
+#### **2. Ejecución:** Si usas Windows, simplemente haz doble clic en el archivo `start.bat`.
+* Si usas la terminal, ejecuta el siguiente comando en la raíz del proyecto:
+  ```bash
+  docker-compose up -d --build
+
+### 💻 **Opción B: Desarrollo Local (Modo Manual)**
+
+#### **1. Prerrequisitos**
 
 Asegúrate de tener instalados los siguientes programas en tu equipo:
 
@@ -18,7 +31,9 @@ Bash
 
 npm install -g @angular/cli
 
-### **2. Instalación de Dependencias**
+npm install bootstrap
+
+#### **2. Instalación de Dependencias**
 
 El proyecto utiliza librerías externas (como el framework de Angular, Bootstrap e iconos) que no se suben al repositorio por peso. Para descargarlas, abre la terminal en la carpeta raíz del proyecto y ejecuta:
 
@@ -28,7 +43,7 @@ npm install
 
 Esto creará la carpeta node\_modules basándose en las versiones exactas del archivo package.json.
 
-### **3. Ejecución del Servidor de Desarrollo**
+#### **3. Ejecución del Servidor de Desarrollo**
 
 En Angular, no necesitamos compilar el SCSS a mano ni recargar el navegador. El CLI de Angular hace todo por nosotros con un servidor local que vigila los cambios.
 
@@ -36,7 +51,7 @@ Abre una terminal en la raíz del proyecto y ejecuta:
 
 Bash
 
-ng serve
+ng serve -o
 
 Acceso: Abre tu navegador y ve a http://localhost:4200/
 
