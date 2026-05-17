@@ -21,25 +21,27 @@ El proyecto está preparado para auto-compilarse y ejecutarse dentro de un servi
 
 #### **1. Prerrequisitos**
 
-Asegúrate de tener instalados los siguientes programas en tu equipo:
+**Asegúrate de tener instalados los siguientes programas en tu equipo:**
 
-Node.js (Versión LTS recomendada).
+  Node.js (Versión LTS recomendada).
 
-Angular CLI instalado globalmente. Si no lo tienes, abre una terminal y ejecuta:
+  Angular CLI instalado globalmente. 
 
-Bash
+**Si no tienes Angular CLI, abre una terminal y ejecuta:**
 
-npm install -g @angular/cli
+  Bash
 
-npm install bootstrap
+  npm install -g @angular/cli
+
 
 #### **2. Instalación de Dependencias**
 
-El proyecto utiliza librerías externas (como el framework de Angular, Bootstrap e iconos) que no se suben al repositorio por peso. Para descargarlas, abre la terminal en la carpeta raíz del proyecto y ejecuta:
+**El proyecto utiliza librerías externas (como el framework de Angular, Bootstrap e iconos)** que no se suben al repositorio por peso. 
+**Para descargarlas, abre la terminal en la carpeta raíz del proyecto y ejecuta:**
 
-Bash
+  Bash
 
-npm install
+  npm install
 
 Esto creará la carpeta node\_modules basándose en las versiones exactas del archivo package.json.
 
@@ -47,13 +49,13 @@ Esto creará la carpeta node\_modules basándose en las versiones exactas del ar
 
 En Angular, no necesitamos compilar el SCSS a mano ni recargar el navegador. El CLI de Angular hace todo por nosotros con un servidor local que vigila los cambios.
 
-Abre una terminal en la raíz del proyecto y ejecuta:
+**Abre una terminal en la raíz del proyecto y ejecuta:**
 
-Bash
+  Bash
 
-ng serve -o
+  ng serve -o
 
-Acceso: Abre tu navegador y ve a http://localhost:4200/
+**Acceso: Abre tu navegador y ve a http://localhost:4200/**
 
 Nota Backend: Para que el panel muestre datos reales, asegúrate de tener el servidor Spring Boot (Backend) ejecutándose de forma simultánea y conectado a la base de datos MariaDB.
 
