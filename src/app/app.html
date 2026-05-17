@@ -1,0 +1,34 @@
+<ng-container *ngIf="isLoginPage">
+   <router-outlet></router-outlet>
+</ng-container>
+
+<ng-container *ngIf="!isLoginPage">
+  <div class="main-wrapper d-flex flex-column h-100">
+    
+    <header class="top-header bg-black text-white d-flex justify-content-between align-items-center px-4 py-3 border-bottom border-secondary">
+       <div class="greeting">
+         <h3 class="m-0 fw-black text-uppercase">¡HOLA, HÉCTOR!</h3>
+         <span class="text-secondary small">Panel de Administración</span>
+       </div>
+       
+       <div class="d-flex align-items-center gap-3">
+         <div class="rounded-circle border border-secondary p-2 d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; cursor: pointer;">
+           <i class="bi bi-bell text-secondary fs-5"></i>
+         </div>
+         <div class="profile d-flex align-items-center gap-2" style="cursor: pointer;">
+            <div class="avatar bg-white text-black d-flex align-items-center justify-content-center rounded-circle fw-bold fs-5" style="width:45px;height:45px;">H</div>
+            <i class="bi bi-chevron-down text-secondary"></i>
+         </div>
+       </div>
+    </header>
+  
+    <div class="lower-content d-flex flex-grow-1 overflow-hidden">
+       <app-sidebar class="sidebar-component"></app-sidebar>
+  
+       <main class="content-area p-4 bg-light flex-grow-1 overflow-auto">
+          <router-outlet></router-outlet>
+       </main>
+    </div>
+
+  </div>
+</ng-container>

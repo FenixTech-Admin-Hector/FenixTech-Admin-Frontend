@@ -1,0 +1,153 @@
+<div class="container-fluid pt-2 pb-4">
+  
+  <div class="card border-0 shadow-sm rounded-3 p-4 mb-4 bg-white position-relative overflow-hidden">
+    <h1 class="fw-black text-uppercase mb-3" style="font-size: 2.5rem; letter-spacing: -1px;">HOLA, HÉCTOR</h1>
+    <p class="fs-5 fw-bold mb-0">Aquí tienes el resumen de FenixTech de hoy (30 de Abril de 2026).</p>
+    <div class="position-absolute opacity-25" style="top: 20px; right: 40px; width: 100px; height: 100px; border-radius: 50%; background-image: radial-gradient(#ccc 2px, transparent 2px); background-size: 10px 10px;"></div>
+  </div>
+
+  <div class="row g-3 mb-5">
+    <div class="col-md">
+      <div class="card border-0 shadow-sm rounded-3 h-100 p-3">
+        <div class="icon-box bg-dark text-white rounded mb-3 d-flex align-items-center justify-content-center"><i class="bi bi-person-fill"></i></div>
+        <h2 class="fw-black mb-2">{{ stats.usuarios.totales }}</h2>
+        <h6 class="fw-bold text-dark mb-2 small">Usuarios Totales</h6>
+        <div class="text-muted" style="font-size: 11px; line-height: 1.2;">
+          <div>Usuarios particulares: {{ stats.usuarios.particulares }}</div>
+          <div>Usuarios empresa: {{ stats.usuarios.empresa }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md">
+      <div class="card border-0 shadow-sm rounded-3 h-100 p-3">
+        <div class="icon-box bg-dark text-white rounded mb-3 d-flex align-items-center justify-content-center"><i class="bi bi-box-fill"></i></div>
+        <h2 class="fw-black mb-2">{{ stats.productos.totales }}</h2>
+        <h6 class="fw-bold text-dark mb-2 small">Productos Totales</h6>
+        <div class="text-muted" style="font-size: 11px; line-height: 1.2;">
+          <div>Productos activos: {{ stats.productos.activos }}</div>
+          <div>Productos inactivos: {{ stats.productos.inactivos }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md">
+      <div class="card border-0 shadow-sm rounded-3 h-100 p-3">
+        <div class="icon-box bg-dark text-white rounded mb-3 d-flex align-items-center justify-content-center"><i class="bi bi-envelope-fill"></i></div>
+        <h2 class="fw-black mb-2">{{ stats.solicitudes.totales }}</h2>
+        <h6 class="fw-bold text-dark mb-2 small">Solicitudes Totales</h6>
+        <div class="text-muted" style="font-size: 11px; line-height: 1.2;">
+          <div>Solicitudes pendientes: {{ stats.solicitudes.pendientes }}</div>
+          <div>Solicitudes aceptadas: {{ stats.solicitudes.aceptadas }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md">
+      <div class="card border-0 shadow-sm rounded-3 h-100 p-3">
+        <div class="icon-box bg-dark text-white rounded mb-3 d-flex align-items-center justify-content-center"><i class="bi bi-bag-fill"></i></div>
+        <h2 class="fw-black mb-2">{{ stats.pedidos.totales }}</h2>
+        <h6 class="fw-bold text-dark mb-2 small">Pedidos Totales</h6>
+        <div class="text-muted" style="font-size: 11px; line-height: 1.2;">
+          <div>Pedidos de envío: {{ stats.pedidos.envio }}</div>
+          <div>Pedidos de recogida: {{ stats.pedidos.recogida }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md">
+      <div class="card border-0 shadow-sm rounded-3 h-100 p-3">
+        <div class="icon-box bg-dark text-white rounded mb-3 d-flex align-items-center justify-content-center"><i class="bi bi-currency-euro"></i></div>
+        <h2 class="fw-black mb-2">{{ stats.ingresos.totales }}€</h2>
+        <h6 class="fw-bold text-dark mb-2 small">Ingresos Totales</h6>
+        <div class="text-muted" style="font-size: 11px; line-height: 1.2;">
+          <div>Ingresos del mes: {{ stats.ingresos.mes }}€</div>
+          <div>Ingresos del día: {{ stats.ingresos.dia }}€</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row align-items-end g-4">
+    <div class="col-md-7">
+      <div class="row text-center"> <div class="col-3">
+          <div class="pie-chart mx-auto mb-3 position-relative d-flex flex-column justify-content-around fw-bold small" [style.background]="getUsuariosPie()">
+            <span class="text-dark mt-2 z-1">{{ stats.usuarios.particulares }}</span>
+            <span class="text-dark mb-2 z-1">{{ stats.usuarios.empresa }}</span>
+          </div>
+          <div class="d-flex flex-column align-items-start ps-3" style="font-size: 11px; font-weight: bold;">
+            <div class="mb-1"><span class="color-dot bg-lime"></span> Particulares</div>
+            <div><span class="color-dot bg-cyan"></span> Empresa</div>
+          </div>
+        </div>
+
+        <div class="col-3">
+          <div class="pie-chart mx-auto mb-3 position-relative d-flex flex-column justify-content-around fw-bold small" [style.background]="getProductosPie()">
+            <span class="text-white mt-2 z-1">{{ stats.productos.activos }}</span>
+            <span class="text-dark mb-2 z-1">{{ stats.productos.inactivos }}</span>
+          </div>
+          <div class="d-flex flex-column align-items-start ps-3" style="font-size: 11px; font-weight: bold;">
+            <div class="mb-1"><span class="color-dot bg-blue"></span> Activos</div>
+            <div><span class="color-dot bg-purple"></span> Inactivos</div>
+          </div>
+        </div>
+
+        <div class="col-3">
+          <div class="pie-chart mx-auto mb-3 position-relative d-flex flex-column justify-content-around fw-bold small" [style.background]="getSolicitudesPie()">
+            <span class="text-white mt-2 z-1">{{ stats.solicitudes.pendientes }}</span>
+            <span class="text-dark mb-2 z-1">{{ stats.solicitudes.aceptadas }}</span>
+          </div>
+          <div class="d-flex flex-column align-items-start ps-3" style="font-size: 11px; font-weight: bold;">
+            <div class="mb-1"><span class="color-dot bg-darkgray"></span> Pendientes</div>
+            <div><span class="color-dot bg-lightgray"></span> Aceptadas</div>
+          </div>
+        </div>
+
+        <div class="col-3">
+          <div class="pie-chart mx-auto mb-3 position-relative d-flex flex-column justify-content-around fw-bold small" [style.background]="getPedidosPie()">
+            <span class="text-white mt-2 z-1">{{ stats.pedidos.envio }}</span>
+            <span class="text-white mb-2 z-1">{{ stats.pedidos.recogida }}</span>
+          </div>
+          <div class="d-flex flex-column align-items-start ps-3" style="font-size: 11px; font-weight: bold;">
+            <div class="mb-1"><span class="color-dot bg-red"></span> Envío</div>
+            <div><span class="color-dot bg-darkblue"></span> Recogida</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="col-md-5">
+      <div class="text-center fw-bold mb-2 small">Ingresos del mes</div>
+      <div class="bar-chart-container d-flex align-items-end border-start border-bottom position-relative" style="height: 150px; padding-left: 5px;">
+        <div class="position-absolute text-muted" style="left: -25px; top: -10px; font-size: 10px;">100</div>
+        <div class="position-absolute text-muted" style="left: -20px; top: 35px; font-size: 10px;">75</div>
+        <div class="position-absolute text-muted" style="left: -20px; top: 70px; font-size: 10px;">50</div>
+        <div class="position-absolute text-muted" style="left: -20px; top: 105px; font-size: 10px;">25</div>
+        <div class="position-absolute text-muted" style="left: -15px; bottom: -5px; font-size: 10px;">0</div>
+        
+        <div class="grid-line" style="bottom: 25%;"></div>
+        <div class="grid-line" style="bottom: 50%;"></div>
+        <div class="grid-line" style="bottom: 75%;"></div>
+
+        <div class="d-flex align-items-end justify-content-between w-100 h-100" style="gap: 2px;">
+          <div class="bar bg-danger" style="height: 70%;"></div><div class="bar bg-danger" style="height: 78%;"></div>
+          <div class="bar bg-danger" style="height: 20%;"></div><div class="bar bg-danger" style="height: 82%;"></div>
+          <div class="bar bg-danger" style="height: 79%;"></div><div class="bar bg-danger" style="height: 85%;"></div>
+          <div class="bar bg-danger" style="height: 12%;"></div><div class="bar bg-danger" style="height: 10%;"></div>
+          <div class="bar bg-danger" style="height: 35%;"></div><div class="bar bg-danger" style="height: 55%;"></div>
+          <div class="bar bg-danger" style="height: 65%;"></div><div class="bar bg-danger" style="height: 8%;"></div>
+          <div class="bar bg-danger" style="height: 42%;"></div><div class="bar bg-danger" style="height: 55%;"></div>
+          <div class="bar bg-danger" style="height: 48%;"></div><div class="bar bg-danger" style="height: 60%;"></div>
+          <div class="bar bg-danger" style="height: 15%;"></div><div class="bar bg-danger" style="height: 62%;"></div>
+          <div class="bar bg-danger" style="height: 85%;"></div><div class="bar bg-danger" style="height: 75%;"></div>
+          <div class="bar bg-danger" style="height: 88%;"></div><div class="bar bg-danger" style="height: 85%;"></div>
+          <div class="bar bg-danger" style="height: 92%;"></div><div class="bar bg-danger" style="height: 65%;"></div>
+          <div class="bar bg-danger" style="height: 62%;"></div><div class="bar bg-danger" style="height: 80%;"></div>
+          <div class="bar bg-danger" style="height: 90%;"></div><div class="bar bg-danger" style="height: 35%;"></div>
+          <div class="bar bg-danger" style="height: 55%;"></div><div class="bar bg-danger" style="height: 95%;"></div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-between mt-1 text-muted" style="font-size: 9px; margin-left: 5px;">
+        <span>0</span><span>2</span><span>4</span><span>6</span><span>8</span><span>10</span><span>12</span><span>14</span><span>16</span><span>18</span><span>20</span><span>22</span><span>24</span><span>26</span><span>28</span><span>30</span>
+      </div>
+    </div>
+  </div>
+
+</div>

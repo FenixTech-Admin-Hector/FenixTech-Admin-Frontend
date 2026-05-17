@@ -1,0 +1,172 @@
+<div class="container-fluid position-relative">
+  
+  <div class="d-flex justify-content-between align-items-center bg-white p-3 rounded shadow-sm mb-4">
+    <div class="d-flex align-items-center gap-2">
+      <i class="bi bi-funnel-fill fs-5"></i> 
+      <span class="fw-bold me-3">Filtrar por rol</span>
+      
+      <button (click)="cambiarFiltro('Todos')" class="btn rounded-pill px-4 fw-bold" [class.btn-dark]="filtroActual === 'Todos'" [class.btn-outline-dark]="filtroActual !== 'Todos'">Todos</button>
+      <button (click)="cambiarFiltro('Particular')" class="btn rounded-pill px-4 fw-bold" [class.btn-dark]="filtroActual === 'Particular'" [class.btn-outline-dark]="filtroActual !== 'Particular'">Particulares</button>
+      <button (click)="cambiarFiltro('Empresa')" class="btn rounded-pill px-4 fw-bold" [class.btn-dark]="filtroActual === 'Empresa'" [class.btn-outline-dark]="filtroActual !== 'Empresa'">Empresas</button>
+    </div>
+    <h2 class="fw-black mb-0 text-uppercase" style="font-weight: 900; letter-spacing: -1px;">Usuarios</h2>
+  </div>
+
+  <div class="row">
+    <div [class]="usuarioSeleccionado ? 'col-md-9' : 'col-md-12'" style="transition: all 0.3s ease;">
+      <div class="table-responsive bg-white shadow-sm rounded">
+        <table class="table table-hover align-middle text-center mb-0">
+          <thead class="table-light border-bottom">
+            <tr class="text-capitalize">
+              <th class="py-3 user-select-none" style="cursor: pointer;" (click)="alternarOrden()" title="Cambiar orden">
+                ID 
+                <i class="bi ms-1" [ngClass]="ordenActual === 'asc' ? 'bi-arrow-down' : 'bi-arrow-up'"></i>
+              </th>
+              
+              <th class="py-3">Nombre</th>
+              <th class="py-3">email</th>
+              <th class="py-3">rol</th>
+              <th class="py-3">estado</th>
+              <th class="py-3">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (user of usuariosFiltrados; track user.id) {
+              <tr [class.table-primary]="usuarioSeleccionado?.id === user.id">
+                <td class="fw-bold">{{ user.id }}</td>
+                <td class="fw-bold">{{ user.nombre }} {{ user.apellidos }}</td>
+                <td>{{ user.email }}</td>
+                <td class="fw-bold">{{ user.rol }}</td>
+                <td class="fw-bold" [class.text-danger]="user.estado === 'Inactivo'" [class.text-success]="user.estado === 'Activo'">
+                  {{ user.estado }}
+                </td>
+                
+                <td>
+                  <button (click)="verDetalle(user)" class="btn btn-sm btn-light border-0 me-1" title="Ver detalle">
+                    <i class="bi bi-eye-fill fs-5"></i>
+                  </button>
+                  <button (click)="abrirEditar(user)" class="btn btn-sm btn-light border-0 text-warning me-1" title="Editar">
+                    <i class="bi bi-pencil-square fs-5"></i>
+                  </button>
+                  
+                  @if (user.estado === 'Activo') {
+                    <button (click)="confirmarBorrado(user)" class="btn btn-sm btn-danger border-0 rounded" title="Banear">
+                      <i class="bi bi-trash-fill fs-6 text-white"></i>
+                    </button>
+                  } @else {
+                    <button (click)="restaurarUsuario(user)" class="btn btn-sm btn-light border-0 text-dark" title="Restaurar/Desbanear">
+                      <i class="bi bi-arrow-clockwise fs-5"></i>
+                    </button>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    @if (usuarioSeleccionado) {
+      <div class="col-md-3 animate__animated animate__fadeInRight">
+        <div class="card border-0 shadow-lg h-100 bg-white">
+          <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 fw-bold text-uppercase"><i class="bi bi-person-badge me-2"></i>Ficha de Usuario</h6>
+            <button (click)="usuarioSeleccionado = null" class="btn-close btn-close-white"></button>
+          </div>
+          <div class="card-body p-4 text-center">
+            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3 border shadow-sm" style="width: 80px; height: 80px;">
+              <i class="bi bi-person-fill text-secondary" style="font-size: 40px;"></i>
+            </div>
+            <h5 class="fw-bold mb-0">{{ usuarioSeleccionado.nombre }} {{ usuarioSeleccionado.apellidos }}</h5>
+            <p class="text-muted small mb-4">{{ usuarioSeleccionado.rol }}</p>
+
+            <div class="text-start bg-light p-3 rounded border">
+              <div class="mb-2">
+                <span class="small text-muted fw-bold text-uppercase d-block">ID de Usuario</span>
+                <span class="fw-bold">#{{ usuarioSeleccionado.id }}</span>
+              </div>
+              <div class="mb-2">
+                <span class="small text-muted fw-bold text-uppercase d-block">Correo Electrónico</span>
+                <span class="text-primary fw-semibold" style="word-break: break-all;">{{ usuarioSeleccionado.email }}</span>
+              </div>
+              <div class="mb-2">
+                <span class="small text-muted fw-bold text-uppercase d-block">Fecha de Alta</span>
+                <span class="small fw-bold">{{ usuarioSeleccionado.fechaRegistro }}</span>
+              </div>
+              <div>
+                <span class="small text-muted fw-bold text-uppercase d-block">Estado Actual</span>
+                @if (usuarioSeleccionado.estado === 'Activo') {
+                  <span class="badge bg-success">Cuenta Activa</span>
+                } @else {
+                  <span class="badge bg-danger">Cuenta Baneada</span>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (usuarioAEditar) {
+    <div class="modal-backdrop fade show" style="background-color: rgba(0,0,0,0.6);"></div>
+    <div class="modal d-block fade show" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg border-0">
+          <div class="modal-header bg-dark text-white border-0">
+            <h5 class="modal-title fw-bold"><i class="bi bi-pencil-square me-2"></i>Editar Usuario</h5>
+            <button (click)="cerrarEditar()" class="btn-close btn-close-white"></button>
+          </div>
+          <div class="modal-body p-4">
+            <form (submit)="guardarEdicion($event)">
+              <div class="row mb-3">
+                <div class="col">
+                  <label class="form-label small fw-bold">Nombre</label>
+                  <input type="text" class="form-control" [value]="usuarioAEditar.nombre" (input)="usuarioAEditar.nombre = $any($event.target).value">
+                </div>
+                <div class="col">
+                  <label class="form-label small fw-bold">Apellidos</label>
+                  <input type="text" class="form-control" [value]="usuarioAEditar.apellidos" (input)="usuarioAEditar.apellidos = $any($event.target).value">
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label small fw-bold">Email</label>
+                <input type="email" class="form-control" [value]="usuarioAEditar.email" (input)="usuarioAEditar.email = $any($event.target).value">
+              </div>
+              <div class="mb-4">
+                <label class="form-label small fw-bold">Rol</label>
+                <select class="form-select bg-light text-muted" [value]="usuarioAEditar.rol" disabled>
+                  <option value="Particular">Particular</option>
+                  <option value="Empresa">Empresa</option>
+                </select>
+                <div class="form-text" style="font-size: 0.75rem;">El rol del usuario no se puede modificar desde el panel.</div>
+              </div>
+              <div class="d-flex justify-content-end gap-2">
+                <button type="button" (click)="cerrarEditar()" class="btn btn-light fw-bold px-4">Cancelar</button>
+                <button type="submit" class="btn btn-warning fw-bold px-4 text-dark">Guardar Cambios</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (usuarioABorrar) {
+    <div class="modal-backdrop fade show" style="background-color: rgba(0,0,0,0.6);"></div>
+    <div class="modal d-block fade show" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content shadow-lg border-0 text-center p-4">
+          <i class="bi bi-exclamation-triangle-fill text-danger mb-3" style="font-size: 3rem;"></i>
+          <h4 class="fw-black mb-3">¿Banear Usuario?</h4>
+          <p class="text-muted mb-4">Vas a desactivar la cuenta de <strong>{{ usuarioABorrar.nombre }} {{ usuarioABorrar.apellidos }}</strong>. Ya no podrá acceder al sistema de FenixTech.</p>
+          <div class="d-grid gap-2">
+            <button (click)="ejecutarBorrado()" class="btn btn-danger fw-bold py-2">Sí, banear usuario</button>
+            <button (click)="cerrarBorrado()" class="btn btn-light fw-bold py-2">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>

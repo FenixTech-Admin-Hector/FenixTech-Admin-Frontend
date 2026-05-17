@@ -1,0 +1,235 @@
+<div class="container-fluid position-relative">
+
+  <div class="d-flex justify-content-between align-items-center bg-white p-3 rounded shadow-sm mb-4">
+    <div class="d-flex align-items-center gap-2">
+      <i class="bi bi-funnel-fill fs-5"></i>
+      <span class="fw-bold me-3">Filtrar por estado</span>
+      <button (click)="cambiarFiltro('Todos')" class="btn rounded-pill px-4 fw-bold"
+        [class.btn-dark]="filtroActual === 'Todos'" [class.btn-outline-dark]="filtroActual !== 'Todos'">Todos</button>
+      <button (click)="cambiarFiltro('Activas')" class="btn rounded-pill px-4 fw-bold"
+        [class.btn-dark]="filtroActual === 'Activas'"
+        [class.btn-outline-dark]="filtroActual !== 'Activas'">Activas</button>
+      <button (click)="cambiarFiltro('Inactivas')" class="btn rounded-pill px-4 fw-bold"
+        [class.btn-dark]="filtroActual === 'Inactivas'"
+        [class.btn-outline-dark]="filtroActual !== 'Inactivas'">Inactivas</button>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+      <button (click)="abrirCrearCat()" class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm">+ Nueva
+        Categoría</button>
+      <h2 class="fw-black mb-0 text-uppercase ms-3" style="font-weight: 900; letter-spacing: -1px;">Categorías</h2>
+    </div>
+  </div>
+
+  <div class="row flex-nowrap gx-4 overflow-hidden">
+
+    <div [class]="categoriaSeleccionada ? 'col-md-7' : 'col-md-12'" class="transition-all">
+      <div class="table-responsive bg-white shadow-sm rounded">
+        <table class="table table-hover align-middle text-center mb-0">
+          <thead class="table-light border-bottom">
+            <tr>
+              <th class="py-3 user-select-none" style="cursor: pointer;" (click)="alternarOrden()" title="Cambiar orden">
+                ID
+                <i class="bi ms-1" [ngClass]="ordenActual === 'asc' ? 'bi-arrow-down' : 'bi-arrow-up'"></i>
+              </th>
+              <th class="py-3">Categorías</th>
+              <th class="py-3">Descripción</th>
+              <th class="py-3">Estado</th>
+              <th class="py-3">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (cat of categoriasFiltradas; track cat.id) {
+            <tr [class.table-primary]="categoriaSeleccionada?.id === cat.id">
+              <td class="fw-bold">{{ cat.id }}</td>
+              <td class="fw-bold">{{ cat.nombre }}</td>
+              <td class="text-start small text-muted" style="max-width: 250px;">{{ cat.descripcion }}</td>
+              <td class="fw-bold" [class.text-danger]="cat.estado === 'Inactiva'"
+                [class.text-success]="cat.estado === 'Activa'">{{ cat.estado }}</td>
+              <td>
+                <button (click)="verSubcategorias(cat)" class="btn btn-sm btn-light border-0 me-1"
+                  title="Ver Subcategorías">
+                  <i class="bi bi-eye-fill fs-5"></i>
+                </button>
+                <button (click)="abrirEditarCategoria(cat)" class="btn btn-sm btn-light border-0 text-warning me-1"
+                  title="Editar">
+                  <i class="bi bi-pencil-square fs-5"></i>
+                </button>
+
+                @if (cat.estado === 'Activa') {
+                <button (click)="confirmarOcultarCategoria(cat)" class="btn btn-sm btn-danger border-0 rounded"
+                  title="Ocultar">
+                  <i class="bi bi-trash-fill fs-6 text-white"></i>
+                </button>
+                } @else {
+                <button (click)="restaurarCategoria(cat)" class="btn btn-sm btn-light border-0 text-dark"
+                  title="Restaurar">
+                  <i class="bi bi-arrow-clockwise fs-5"></i>
+                </button>
+                }
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    @if (categoriaSeleccionada) {
+    <div class="col-md-5 animate__animated animate__fadeInRight">
+      <div class="bg-white p-3 rounded shadow-sm border-top border-4 border-dark h-100">
+        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+          <div>
+            <h5 class="fw-black mb-0 text-uppercase">Subcategorías</h5>
+            <span class="text-muted small">Hijas de <strong>{{ categoriaSeleccionada.nombre }}</strong></span>
+          </div>
+          <div class="d-flex gap-2">
+            <button (click)="abrirCrearSub()" class="btn btn-sm btn-dark rounded-pill fw-bold">+ Añadir Sub</button>
+            <button (click)="categoriaSeleccionada = null" class="btn-close"></button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-sm align-middle text-center mb-0">
+            <thead class="table-light">
+              <tr class="small text-muted text-uppercase">
+                <th class="py-2">ID</th>
+                <th class="py-2">Subcategoría</th>
+                <th class="py-2">Estado</th>
+                <th class="py-2">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (sub of categoriaSeleccionada.subcategorias; track sub.id) {
+              <tr>
+                <td>{{ sub.id }}</td>
+                <td class="fw-bold">{{ sub.nombre }}</td>
+                <td class="small fw-bold" [class.text-danger]="sub.estado === 'Inactiva'"
+                  [class.text-success]="sub.estado === 'Activa'">{{ sub.estado }}</td>
+                <td>
+                  @if (categoriaSeleccionada.estado === 'Activa') {
+                    <button (click)="abrirEditarSubcategoria(sub)"
+                      class="btn btn-sm btn-light border-0 text-warning p-1 me-1"><i
+                        class="bi bi-pencil-square"></i></button>
+                    
+                    @if (sub.estado === 'Activa') {
+                      <button (click)="confirmarOcultarSubcategoria(sub)"
+                        class="btn btn-sm btn-danger border-0 rounded p-1"><i
+                          class="bi bi-trash-fill text-white"></i></button>
+                    } @else {
+                      <button (click)="restaurarSubcategoria(sub)" class="btn btn-sm btn-light border-0 p-1"><i
+                          class="bi bi-arrow-clockwise"></i></button>
+                    }
+                  } 
+                  @else {
+                    <i class="bi bi-lock-fill text-muted fs-5" title="Bloqueada porque la categoría principal está oculta"></i>
+                  }
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+
+  @if (mostrarCrearCat) {
+  <div class="modal-backdrop fade show"></div>
+  <div class="modal d-block show px-3">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-4 shadow-lg border-0">
+        <h4 class="fw-black text-uppercase mb-4">Nueva Categoría</h4>
+        <input type="text" class="form-control mb-3" [(ngModel)]="nuevaCat.nombre" placeholder="Nombre">
+        <textarea class="form-control mb-4" rows="3" [(ngModel)]="nuevaCat.descripcion"
+          placeholder="Descripción"></textarea>
+        <div class="d-grid gap-2"><button (click)="ejecutarCrearCat()"
+            class="btn btn-dark fw-bold py-2">Crear</button><button (click)="mostrarCrearCat = false"
+            class="btn btn-light fw-bold py-2">Cancelar</button></div>
+      </div>
+    </div>
+  </div>
+  }
+
+  @if (categoriaAEditar) {
+  <div class="modal-backdrop fade show"></div>
+  <div class="modal d-block show px-3">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-4 shadow-lg border-0">
+        <h4 class="fw-black text-uppercase mb-4 text-warning">Editar Categoría</h4>
+        <input type="text" class="form-control mb-3" [(ngModel)]="categoriaAEditar.nombre">
+        <textarea class="form-control mb-4" rows="3" [(ngModel)]="categoriaAEditar.descripcion"></textarea>
+        <div class="d-grid gap-2"><button (click)="guardarEdicionCategoria($event)"
+            class="btn btn-warning fw-bold py-2">Guardar</button><button (click)="cerrarEditarCategoria()"
+            class="btn btn-light fw-bold py-2">Cancelar</button></div>
+      </div>
+    </div>
+  </div>
+  }
+
+  @if (categoriaAOcultar) {
+  <div class="modal-backdrop fade show"></div>
+  <div class="modal d-block show px-3">
+    <div class="modal-dialog modal-dialog-centered modal-sm text-center">
+      <div class="modal-content p-4 shadow-lg border-0">
+        <i class="bi bi-eye-slash-fill text-danger fs-1 mb-3"></i>
+        <h4 class="fw-black text-uppercase">¿Ocultar?</h4>
+        <p class="text-muted small">Se ocultarán también sus subcategorías.</p>
+        <div class="d-grid gap-2"><button (click)="ejecutarOcultarCategoria()"
+            class="btn btn-danger fw-bold py-2">Confirmar</button><button (click)="cerrarOcultarCategoria()"
+            class="btn btn-light fw-bold py-2">Cancelar</button></div>
+      </div>
+    </div>
+  </div>
+  }
+
+  @if (mostrarCrearSub) {
+  <div class="modal-backdrop fade show"></div>
+  <div class="modal d-block show px-3">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-4 shadow-lg border-0">
+        <h4 class="fw-black text-uppercase mb-4">Nueva Subcategoría</h4>
+        <input type="text" class="form-control mb-3" [(ngModel)]="nuevaSub.nombre" placeholder="Nombre">
+        <textarea class="form-control mb-4" rows="3" [(ngModel)]="nuevaSub.descripcion"
+          placeholder="Descripción"></textarea>
+        <div class="d-grid gap-2"><button (click)="ejecutarCrearSub()"
+            class="btn btn-dark fw-bold py-2">Añadir</button><button (click)="mostrarCrearSub = false"
+            class="btn btn-light fw-bold py-2">Cancelar</button></div>
+      </div>
+    </div>
+  </div>
+  }
+
+  @if (subcategoriaAEditar) {
+  <div class="modal-backdrop fade show"></div>
+  <div class="modal d-block show px-3">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-4 shadow-lg border-0">
+        <h4 class="fw-black text-uppercase mb-4 text-warning">Editar Subcategoría</h4>
+        <input type="text" class="form-control mb-3" [(ngModel)]="subcategoriaAEditar.nombre">
+        <textarea class="form-control mb-4" rows="3" [(ngModel)]="subcategoriaAEditar.descripcion"></textarea>
+        <div class="d-grid gap-2"><button (click)="guardarEdicionSubcategoria($event)"
+            class="btn btn-warning fw-bold py-2">Guardar</button><button (click)="cerrarEditarSubcategoria()"
+            class="btn btn-light fw-bold py-2">Cancelar</button></div>
+      </div>
+    </div>
+  </div>
+  }
+
+  @if (subcategoriaAOcultar) {
+  <div class="modal-backdrop fade show"></div>
+  <div class="modal d-block show px-3">
+    <div class="modal-dialog modal-dialog-centered modal-sm text-center">
+      <div class="modal-content p-4 shadow-lg border-0">
+        <i class="bi bi-trash-fill text-danger fs-1 mb-3"></i>
+        <h4 class="fw-black text-uppercase">¿Ocultar Sub?</h4>
+        <div class="d-grid gap-2"><button (click)="ejecutarOcultarSubcategoria()"
+            class="btn btn-danger fw-bold py-2">Confirmar</button><button (click)="cerrarOcultarSubcategoria()"
+            class="btn btn-light fw-bold py-2">Cancelar</button></div>
+      </div>
+    </div>
+  </div>
+  }
+
+</div>

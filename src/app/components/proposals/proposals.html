@@ -1,0 +1,125 @@
+<div class="container-fluid position-relative">
+  
+  <div class="d-flex justify-content-between align-items-center bg-white p-3 rounded shadow-sm mb-4">
+    <div class="d-flex align-items-center gap-2">
+      <i class="bi bi-funnel-fill fs-5"></i> 
+      <span class="fw-bold me-3">Filtrar por estado</span>
+      <button (click)="cambiarFiltro('Todos')" class="btn rounded-pill px-4 fw-bold" [class.btn-dark]="filtroActual === 'Todos'" [class.btn-outline-dark]="filtroActual !== 'Todos'">Todos</button>
+      <button (click)="cambiarFiltro('Pendiente')" class="btn rounded-pill px-4 fw-bold" [class.btn-dark]="filtroActual === 'Pendiente'" [class.btn-outline-dark]="filtroActual !== 'Pendiente'">Pendiente</button>
+      <button (click)="cambiarFiltro('Completada')" class="btn rounded-pill px-4 fw-bold" [class.btn-dark]="filtroActual === 'Completada'" [class.btn-outline-dark]="filtroActual !== 'Completada'">Completada</button>
+    </div>
+    <h2 class="fw-black mb-0 text-uppercase" style="font-weight: 900; letter-spacing: -1px;">Solicitudes</h2>
+  </div>
+
+  <div class="row">
+    <div [class]="propuestaSeleccionada ? 'col-md-9' : 'col-md-12'" class="transition-all">
+      <div class="table-responsive bg-white shadow-sm rounded">
+        <table class="table table-hover align-middle text-center mb-0">
+         <thead class="table-light border-bottom">
+            <tr>
+              <th class="py-3 user-select-none" style="cursor: pointer;" (click)="alternarOrden()" title="Cambiar orden">
+                ID
+                <i class="bi ms-1" [ngClass]="ordenActual === 'asc' ? 'bi-arrow-down' : 'bi-arrow-up'"></i>
+              </th>
+              <th class="py-3">Nombre</th>
+              <th class="py-3">Solicitante</th>
+              <th class="py-3">Categoría</th>
+              <th class="py-3">Estado</th>
+              <th class="py-3">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of solicitudesFiltradas; track item.id) {
+              <tr [class.table-primary]="propuestaSeleccionada?.id === item.id">
+                <td class="fw-bold">{{ item.id }}</td>
+                <td class="fw-bold">{{ item.nombre }}</td>
+                <td>{{ item.solicitante }}</td>
+                <td class="fw-bold">{{ item.categoria }}</td>
+                <td>{{ item.estado }}</td>
+                <td>
+                  <button (click)="verDetalle(item)" class="btn btn-sm btn-light border-0 me-1">
+                    <i class="bi bi-eye-fill fs-5"></i>
+                  </button>
+                  
+                  @if (item.estado === 'Pendiente') {
+                    <button (click)="confirmarBorrado(item)" class="btn btn-sm btn-danger border-0 rounded">
+                      <i class="bi bi-trash-fill fs-6 text-white"></i>
+                    </button>
+                  } @else {
+                    <i class="bi bi-check-circle-fill text-success fs-4"></i>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    @if (propuestaSeleccionada) {
+      <div class="col-md-3 animate__animated animate__fadeInRight">
+        <div class="card border-0 shadow-lg h-100 bg-white">
+          <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 fw-bold text-uppercase">Revisar Solicitud</h6>
+            <button (click)="propuestaSeleccionada = null" class="btn-close btn-close-white"></button>
+          </div>
+          
+          <div class="card-body p-4">
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-muted text-uppercase">Título de Solicitud</label>
+              <div class="p-2 bg-light border rounded fw-bold text-dark">{{ propuestaSeleccionada.nombre }}</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-muted text-uppercase">Solicitante</label>
+              <div class="p-2 bg-light border rounded">
+                <div class="fw-bold">{{ propuestaSeleccionada.solicitante }}</div>
+                <div class="small text-primary">{{ propuestaSeleccionada.email }}</div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-muted text-uppercase">Fecha de Creación</label>
+              <div class="p-2 bg-light border rounded small">{{ propuestaSeleccionada.fecha }}</div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label small fw-bold text-muted text-uppercase">Descripción Detallada</label>
+              <div class="p-3 bg-light border rounded text-muted" style="font-size: 14px; min-height: 120px;">
+                {{ propuestaSeleccionada.descripcion }}
+              </div>
+            </div>
+
+            <div class="d-grid gap-2">
+              @if (propuestaSeleccionada.estado === 'Pendiente') {
+                <button (click)="confirmarBorrado(propuestaSeleccionada)" class="btn btn-danger fw-bold py-2"><i class="bi bi-trash-fill me-2"></i>Rechazar y Borrar</button>
+              } @else {
+                <div class="alert alert-success text-center fw-bold py-2">
+                  <i class="bi bi-check-circle-fill me-2"></i>SOLICITUD PROCESADA
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (propuestaABorrar) {
+    <div class="modal-backdrop fade show" style="background-color: rgba(0,0,0,0.6);"></div>
+    <div class="modal d-block fade show" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content shadow-lg border-0 text-center p-4">
+          <i class="bi bi-exclamation-triangle-fill text-danger mb-3" style="font-size: 3rem;"></i>
+          <h4 class="fw-black mb-3">¿Borrar Solicitud?</h4>
+          <p class="text-muted mb-4">Vas a eliminar permanentemente la solicitud <strong>{{ propuestaABorrar.nombre }}</strong>. Esta acción no se puede deshacer.</p>
+          <div class="d-grid gap-2">
+            <button (click)="ejecutarBorrado()" class="btn btn-danger fw-bold py-2">Sí, borrar definitivamente</button>
+            <button (click)="cerrarBorrado()" class="btn btn-light fw-bold py-2">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>

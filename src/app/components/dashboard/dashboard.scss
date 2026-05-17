@@ -1,0 +1,65 @@
+/* Caja verde del icono en las tarjetas */
+.icon-box {
+  width: 32px;
+  height: 32px;
+  background-color: #3f6250 !important;
+}
+
+/* Base de los Gráficos Circulares */
+.pie-chart {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Línea central separadora visual para los gráficos */
+.pie-chart::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: rgba(0,0,0,0.2);
+  z-index: 0;
+}
+
+/* Leyendas de colores */
+.color-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.bg-lime { background-color: #bef264; }
+.bg-cyan { background-color: #22d3ee; }
+.bg-blue { background-color: #6366f1; }
+.bg-purple { background-color: #c084fc; }
+.bg-darkgray { background-color: #4b5563; }
+.bg-lightgray { background-color: #d1d5db; }
+.bg-red { background-color: #ef4444; }
+.bg-darkblue { background-color: #1d4ed8; }
+
+/* Gráfico de barras */
+.bar-chart-container {
+  background-color: transparent;
+  
+  .bar {
+    width: 100%; // Ocupa el espacio disponible en el flex
+    border-radius: 2px 2px 0 0;
+    transition: height 0.5s ease;
+  }
+  
+  .grid-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #e5e7eb;
+    z-index: -1;
+  }
+}

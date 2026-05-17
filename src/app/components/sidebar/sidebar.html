@@ -1,0 +1,50 @@
+<div class="d-flex flex-column flex-shrink-0 p-3 text-white h-100" style="background-color: var(--fenix-maroon);">
+    
+    <div class="text-center mb-4 border-bottom border-white border-opacity-25 pb-3">
+        <h4 class="fw-black text-uppercase m-0" style="letter-spacing: 2px;">ADMIN</h4>
+    </div>
+
+    <ul class="nav nav-pills flex-column mb-auto gap-2">
+      <li class="nav-item">
+        <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link text-white d-flex align-items-center gap-2">
+          <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+      </li>
+      <li>
+        <a routerLink="/usuarios" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link text-white d-flex align-items-center gap-2">
+          <i class="bi bi-people"></i> Usuarios
+        </a>
+      </li>
+      <li>
+        <a routerLink="/productos" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link text-white d-flex align-items-center gap-2">
+          <i class="bi bi-box-seam"></i> Productos
+        </a>
+      </li>
+      <li>
+        <a routerLink="/solicitudes" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link text-white d-flex align-items-center gap-2">
+          <i class="bi bi-envelope-paper"></i> Solicitudes
+        </a>
+      </li>
+      <li>
+        <a routerLink="/pedidos" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link text-white d-flex align-items-center gap-2">
+          <i class="bi bi-cart3"></i> Pedidos
+        </a>
+      </li>
+      <li>
+        <a routerLink="/categorias" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link text-white d-flex align-items-center gap-2">
+          <i class="bi bi-tags"></i> Categorías
+        </a>
+      </li>
+      <li>
+        <a routerLink="/comunidad" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link text-white d-flex align-items-center gap-2">
+          <i class="bi bi-chat-left-text"></i> Comunidad
+        </a>
+      </li>
+    </ul>
+
+    <div class="mt-auto border-top border-white border-opacity-25 pt-3">
+        <button (click)="logout()" class="btn btn-light w-100 fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2" style="color: var(--fenix-maroon);">
+            <i class="bi bi-box-arrow-left fs-5"></i> Cerrar Sesión
+        </button>
+    </div>
+</div>

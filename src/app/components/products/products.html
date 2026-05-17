@@ -1,0 +1,138 @@
+<div class="container-fluid position-relative">
+  
+  <div class="d-flex justify-content-between align-items-center bg-white p-3 rounded shadow-sm mb-4">
+    <div class="d-flex align-items-center gap-2">
+      <i class="bi bi-funnel-fill fs-5"></i> 
+      <span class="fw-bold me-3">Filtrar por categoría</span>
+      
+      <button (click)="cambiarFiltro('Todos')" class="btn rounded-pill px-3 fw-bold" [class.btn-dark]="filtroActual === 'Todos'" [class.btn-outline-dark]="filtroActual !== 'Todos'">Todos</button>
+      <button (click)="cambiarFiltro('Ordenadores')" class="btn rounded-pill px-3 fw-bold" [class.btn-dark]="filtroActual === 'Ordenadores'" [class.btn-outline-dark]="filtroActual !== 'Ordenadores'">Ordenadores</button>
+      <button (click)="cambiarFiltro('Smartphones')" class="btn rounded-pill px-3 fw-bold" [class.btn-dark]="filtroActual === 'Smartphones'" [class.btn-outline-dark]="filtroActual !== 'Smartphones'">Smartphones</button>
+      <button (click)="cambiarFiltro('Periféricos')" class="btn rounded-pill px-3 fw-bold" [class.btn-dark]="filtroActual === 'Periféricos'" [class.btn-outline-dark]="filtroActual !== 'Periféricos'">Periféricos</button>
+      <button (click)="cambiarFiltro('Componentes')" class="btn rounded-pill px-3 fw-bold" [class.btn-dark]="filtroActual === 'Componentes'" [class.btn-outline-dark]="filtroActual !== 'Componentes'">Componentes</button>
+      <button (click)="cambiarFiltro('Servidores')" class="btn rounded-pill px-3 fw-bold" [class.btn-dark]="filtroActual === 'Servidores'" [class.btn-outline-dark]="filtroActual !== 'Servidores'">Servidores</button>
+    </div>
+
+    <h2 class="fw-black mb-0 text-uppercase" style="font-weight: 900; letter-spacing: -1px;">Productos</h2>
+  </div>
+
+  <div class="row">
+    <div [class]="productoSeleccionado ? 'col-md-9' : 'col-md-12'" style="transition: all 0.3s ease;">
+      <div class="table-responsive bg-white shadow-sm rounded">
+        <table class="table table-hover align-middle text-center mb-0">
+          
+          <thead class="table-light border-bottom">
+            <tr class="text-capitalize">
+              <th class="py-3 user-select-none" style="cursor: pointer;" (click)="alternarOrden()" title="Cambiar orden">
+                ID
+                <i class="bi ms-1" [ngClass]="ordenActual === 'asc' ? 'bi-arrow-down' : 'bi-arrow-up'"></i>
+              </th>
+              <th class="py-3">Nombre</th>
+              <th class="py-3">Empresa</th>
+              <th class="py-3">Categoría</th>
+              <th class="py-3">Precio</th>
+              <th class="py-3">Stock</th>
+              <th class="py-3">Estado</th>
+              <th class="py-3">Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (product of productosFiltrados; track product.id) {
+              <tr [class.table-primary]="productoSeleccionado?.id === product.id">
+                <td class="fw-bold">{{ product.id }}</td>
+                <td class="fw-bold">{{ product.nombre }}</td>
+                <td>{{ product.empresa }}</td>
+                <td class="fw-bold">{{ product.categoria }}</td>
+                <td>{{ product.precio }}€</td>
+                <td class="fw-bold">{{ product.stock }}</td>
+                
+                <td class="fw-bold" [class.text-danger]="product.estado === 'Inactivo'" [class.text-success]="product.estado === 'Activo'">
+                  {{ product.estado }}
+                </td>
+                
+                <td>
+                  <button (click)="verDetalle(product)" class="btn btn-sm btn-light border-0 me-1" title="Ver Detalles">
+                    <i class="bi bi-eye-fill fs-5"></i>
+                  </button>
+
+                  @if (product.estado === 'Activo') {
+                    <button (click)="confirmarOcultar(product)" class="btn btn-sm btn-danger border-0 rounded" title="Ocultar">
+                      <i class="bi bi-trash-fill fs-6 text-white"></i>
+                    </button>
+                  } 
+                  @else {
+                    <button (click)="restaurarProducto(product)" class="btn btn-sm btn-light border-0 text-dark" title="Restaurar">
+                      <i class="bi bi-arrow-clockwise fs-5"></i>
+                    </button>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+          
+        </table>
+      </div>
+    </div>
+
+    @if (productoSeleccionado) {
+      <div class="col-md-3 animate__animated animate__fadeInRight">
+        <div class="card border-0 shadow-lg h-100 bg-white">
+          <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 fw-bold text-uppercase"><i class="bi bi-box-seam me-2"></i>Ficha del Producto</h6>
+            <button (click)="productoSeleccionado = null" class="btn-close btn-close-white"></button>
+          </div>
+          
+          <div class="card-body p-4">
+            <div class="text-center mb-4">
+              <h5 class="fw-bold text-dark mb-1">{{ productoSeleccionado.nombre }}</h5>
+              <span class="badge" [class.bg-success]="productoSeleccionado.tipo === 'Venta'" [class.bg-info]="productoSeleccionado.tipo === 'Donación'">
+                {{ productoSeleccionado.tipo }}
+              </span>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-muted text-uppercase">Subcategoría</label>
+              <div class="p-2 bg-light border rounded fw-bold text-primary">{{ productoSeleccionado.subcategoria }}</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-muted text-uppercase">Vendedor / Empresa</label>
+              <div class="p-2 bg-light border rounded fw-bold">{{ productoSeleccionado.empresa }}</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-muted text-uppercase">Stock Disponible</label>
+              <div class="p-2 bg-light border rounded">{{ productoSeleccionado.stock }} unidades</div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label small fw-bold text-muted text-uppercase">Descripción</label>
+              <div class="p-3 bg-light border rounded text-muted" style="font-size: 14px; min-height: 100px;">
+                {{ productoSeleccionado.descripcion }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (productoAOcultar) {
+    <div class="modal-backdrop fade show" style="background-color: rgba(0,0,0,0.6);"></div>
+    <div class="modal d-block fade show" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content shadow-lg border-0 text-center p-4">
+          <i class="bi bi-eye-slash-fill text-danger mb-3" style="font-size: 3rem;"></i>
+          <h4 class="fw-black mb-3">¿Ocultar Producto?</h4>
+          <p class="text-muted mb-4">El producto <strong>{{ productoAOcultar.nombre }}</strong> pasará a estar Inactivo y desaparecerá de la vista de los usuarios.</p>
+          <div class="d-grid gap-2">
+            <button (click)="ejecutarOcultar()" class="btn btn-danger fw-bold py-2">Sí, ocultar</button>
+            <button (click)="cerrarOcultar()" class="btn btn-light fw-bold py-2">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>

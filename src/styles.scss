@@ -1,0 +1,67 @@
+
+// 2. Importamos todo el SCSS de Bootstrap
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+// 3. Importamos los iconos
+@import "../node_modules/bootstrap-icons/font/bootstrap-icons.scss";
+@import "app/components/community/community.scss";
+@import "app/app.scss";
+@import "app/components/sidebar/sidebar.scss";
+@import "app/components/dashboard/dashboard.scss";
+@import "app/components/auth/login/login.scss";
+
+// 4. Estilos globales extra
+:root {
+  --fenix-maroon: #8B2B2B;
+}
+
+/* Fuente ultra-negrita para imitar Figma */
+.fw-black {
+  font-weight: 900 !important;
+}
+
+/* Reset básico para que ocupe toda la pantalla */
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  overflow: hidden; 
+}
+
+body {
+  background-color: #f8f9fa;
+}
+// Esto hará que el botón activo de tu menú se vea perfecto
+.nav-pills .nav-link.active {
+    background-color: #0d6efd;
+    font-weight: bold;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* --- SOLUCIÓN GLOBAL PARA TABLAS DIVIDIDAS --- */
+
+/* 1. Evita que el contenido salte abajo durante la animación */
+.row.flex-nowrap {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: flex-start;
+}
+
+/* 2. Suaviza la transición de encojer/agrandar de la tabla */
+.transition-all {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* 3. Evita que el texto de las celdas se rompa al encojerse la tabla */
+td, th {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 4. Estilo base para los modales ya creados */
+.modal-backdrop {
+    background-color: rgba(0,0,0,0.6) !important;
+}

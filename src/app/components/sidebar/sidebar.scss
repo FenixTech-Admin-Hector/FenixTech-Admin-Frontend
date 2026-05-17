@@ -1,0 +1,10 @@
+// Estilo para el enlace activo dentro del sidebar marrón
+.nav-pills .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2) !important; // Fondo blanco semitransparente
+    font-weight: bold;
+}
+
+// Efecto hover suave
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
