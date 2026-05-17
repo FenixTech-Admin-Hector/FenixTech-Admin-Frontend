@@ -36,7 +36,7 @@ Abre una terminal en la raíz del proyecto y ejecuta:
 
 Bash
 
-ng serve
+ng serve -o
 
 Acceso: Abre tu navegador y ve a http://localhost:4200/
 
